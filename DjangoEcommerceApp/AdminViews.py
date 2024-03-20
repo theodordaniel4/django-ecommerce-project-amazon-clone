@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect,HttpResponse
 from django.db.models import Q
 from DjangoEcommerce.settings import BASE_URL
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 @login_required(login_url="/admin/")
 def admin_home(request):
@@ -258,7 +259,8 @@ def file_upload(request):
     return HttpResponse('{"location":"'+BASE_URL+''+file_url+'"}')
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
+    login_url = '/admin/'
     model=Products
     template_name="admin_templates/product_list.html"
     paginate_by=3
